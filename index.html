@@ -102,11 +102,19 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 .x{position:absolute;right:14px;top:12px}
 .toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#141c38;border:1px solid var(--line2);color:var(--ch);padding:10px 18px;border-radius:999px;opacity:0;transition:.35s;z-index:70;font-size:.9rem}
 .toast.show{opacity:1;transform:translateX(-50%)}
+
+.svc .card{display:block;text-decoration:none;color:inherit}
+.more .pl{transition:transform .4s}.svc .card:hover .more .pl{transform:translateX(4px)}
+.xp{position:fixed;z-index:90;border-radius:24px;padding:30px;overflow:hidden;border:1px solid rgba(233,216,185,.5);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02) 40%),#0d1430;box-shadow:0 0 0 1px rgba(233,216,185,.2),0 0 80px -10px rgba(233,216,185,.45);transition:left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1),height .7s cubic-bezier(.7,0,.2,1),border-radius .7s,padding .7s}
+.xp>*{transition:opacity .35s,transform .5s,filter .35s}
+.xp.go{left:0!important;top:0!important;width:100vw!important;height:100vh!important;border-radius:0;padding:80px 8vw}
+.xp.go>*{opacity:0;transform:translateY(-30px) scale(1.15);filter:blur(8px)}
+.xp .glare{display:none}
 /* intro */
 #intro{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;overflow:hidden}
 #intro.fade{transition:background .9s;background:transparent}
 #intro.gone{display:none}
-#pc{position:absolute;inset:0;width:100%;height:100%}
+#pc{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 4px rgba(233,216,185,.85))}
 .kt{position:relative;text-align:center;font-family:var(--serif);perspective:900px;pointer-events:none}
 .kt .w1{display:block;font-size:clamp(3rem,13vw,9rem);font-weight:800;letter-spacing:.06em;line-height:1}
 .kt .w2{display:block;font-family:var(--sans);font-size:clamp(.9rem,2.6vw,1.6rem);font-weight:500;letter-spacing:.9em;margin-top:14px;padding-left:.9em;color:var(--ch);opacity:0}
@@ -119,7 +127,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 .skip{position:absolute;right:20px;bottom:22px;z-index:2;background:none;border:1px solid var(--line2);color:var(--ch);padding:8px 16px;border-radius:999px;font:inherit;font-size:.85rem;cursor:pointer;letter-spacing:1px}
 .pre{opacity:0}
 .pre.on{opacity:1;transition:opacity .8s}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none;filter:none}}
+
 </style>
 </head>
 <body class="locked">
@@ -155,7 +163,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 <section id="services">
 <span class="eyebrow rv">Services</span>
 <h2 class="rv">What we <span class="gold">create</span></h2>
-<p class="sub rv">Tap any service to see what you get.</p>
+<p class="sub rv">Tap any service to open its full details.</p>
 <div class="grid svc" id="svc"></div>
 </section>
 
@@ -193,7 +201,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 <script>
 (()=>{
 const EMAIL="nexorastudios795@gmail.com";
-const RM=matchMedia('(prefers-reduced-motion:reduce)').matches, FINE=matchMedia('(hover:hover)').matches;
+const RM=false, FINE=matchMedia('(hover:hover)').matches;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const IC={
 web:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
@@ -222,13 +230,18 @@ const SFX={tap:()=>tone(1400,700,.06,.06),open:()=>{whoosh(.35,.10,400,2400);ton
 sndBtn.onclick=()=>{muted=!muted;localStorage.setItem('nx_mute',muted?'1':'0');paintSnd();if(!muted){ac();SFX.chime()}};
 document.addEventListener('pointerdown',e=>{ac();if(e.target.closest('button,a,.card'))SFX.tap()},{passive:true});
 
-/* ---------- services ---------- */
+/* ---------- services: tap -> card expands -> service page ---------- */
+const SL={"Landing pages": "landing-page", "E-commerce stores": "ecommerce-store", "AI advertisements": "ai-advertisement", "3D product ads": "3d-product-ad", "SaaS / app promo videos": "saas-app-promo-video", "AI video editing": "ai-video-editing"};
 const g=$('#svc');
-S.forEach(s=>{const c=document.createElement('div');c.className='card tilt rv';c.tabIndex=0;c.setAttribute('role','button');c.setAttribute('aria-expanded','false');
-c.innerHTML=`<div class="glare"></div><div class="ic">${IC[s.i]}</div><h3>${s.t}</h3><p>${s.d}</p><span class="more"><span class="pl">+</span><span class="lbl">View details</span></span><div class="detail"><div><ul>${s.l.map(x=>`<li>${x}</li>`).join('')}</ul><p class="meta">Price and timeline depend on your project. Get a free quote.</p><button class="btn sm" data-contact="${s.t}">Get a quote</button></div></div>`;
-const tog=e=>{if(e.target.closest('button,a'))return;const o=c.classList.toggle('open');c.setAttribute('aria-expanded',o);c.querySelector('.lbl').textContent=o?'Hide details':'View details';o?SFX.open():SFX.close();if(o)setTimeout(()=>c.scrollIntoView({behavior:'smooth',block:'nearest'}),380)};
-c.addEventListener('click',tog);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tog(e)}});g.appendChild(c)});
-
+S.forEach(s=>{const c=document.createElement('a');c.className='card tilt rv';c.href='services/'+SL[s.t]+'.html';
+c.innerHTML=`<div class="glare"></div><div class="ic">${IC[s.i]}</div><h3>${s.t}</h3><p>${s.d}</p><span class="more"><span class="lbl">Open service</span><span class="pl">→</span></span>`;
+c.addEventListener('click',e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();expandTo(c,c.href)});g.appendChild(c)});
+function expandTo(c,url){const r=c.getBoundingClientRect();const v=document.createElement('div');v.className='xp';
+v.style.cssText=`left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px`;v.innerHTML=c.innerHTML;document.body.appendChild(v);
+c.style.visibility='hidden';SFX.open();sessionStorage.setItem('nx_back','1');
+requestAnimationFrame(()=>requestAnimationFrame(()=>{v.classList.add('go')}));
+setTimeout(()=>{location.href=url},720)}
+addEventListener('pageshow',e=>{$$('.xp').forEach(x=>x.remove());$$('#svc .card').forEach(c=>c.style.visibility='')});
 /* ---------- tilt + glare ---------- */
 $$('.tilt').forEach(c=>{if(RM)return;c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty('--gx',x*100+'%');c.style.setProperty('--gy',y*100+'%');if(FINE&&c.classList.contains('in'))c.style.transform=`rotateY(${(x-.5)*9}deg) rotateX(${(.5-y)*9}deg)`});c.addEventListener('pointerleave',()=>{c.style.transform=''})});
 
@@ -275,8 +288,8 @@ function reveal(){$$('.pre').forEach((e,i)=>setTimeout(()=>e.classList.add('on')
 function finish(){if(introDone)return;intro.classList.add('gone');reveal()}
 $('#skip').onclick=()=>{cancel=true;finish()};
 let cancel=false;
-const seen=sessionStorage.getItem('nx_intro')==='1';
-if(RM||seen){finish()}else{sessionStorage.setItem('nx_intro','1');runIntro()}
+const back=sessionStorage.getItem('nx_back')==='1';sessionStorage.removeItem('nx_back');
+if(back){finish()}else{runIntro()}
 
 async function runIntro(){
   try{await Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))])}catch(e){}
@@ -284,9 +297,9 @@ async function runIntro(){
   setTimeout(()=>{if(!cancel)tone(330,660,.5,.04,'triangle')},150);
   await wait(2300);if(cancel)return;
   // sample the title into particles
-  const W=pc.width=innerWidth*dpr,H=pc.height=innerHeight*dpr;
+  const dpr=1;const W=pc.width=innerWidth*dpr,H=pc.height=innerHeight*dpr;
   const mem=navigator.deviceMemory||4,cores=navigator.hardwareConcurrency||4,small=innerWidth<900;
-  const MAX=small?(mem<=4?14000:22000):(cores>=8?70000:40000);
+  const MAX=small?(mem<=4?9000:13000):(cores>=8?30000:20000);
   const oc=document.createElement('canvas');oc.width=W;oc.height=H;const o=oc.getContext('2d');
   const r1=w1.getBoundingClientRect(),r2=kt.querySelector('.w2').getBoundingClientRect();
   const fs1=parseFloat(getComputedStyle(w1).fontSize)*dpr,fs2=parseFloat(getComputedStyle(kt.querySelector('.w2')).fontSize)*dpr;
@@ -294,7 +307,7 @@ async function runIntro(){
   o.font=`800 ${fs1}px "Playfair Display",Georgia,serif`;o.letterSpacing=(fs1*.06)+'px';o.fillText('NEXORA',(r1.left+r1.width/2)*dpr,(r1.top+r1.height/2)*dpr);
   o.font=`500 ${fs2}px Inter,sans-serif`;o.letterSpacing=(fs2*.9)+'px';o.fillText('STUDIOS',(r2.left+r2.width/2+fs2*.45/dpr)*dpr,(r2.top+r2.height/2)*dpr);
   const img=o.getImageData(0,0,W,H).data;const pts=[];
-  for(let y=0;y<H;y+=1)for(let x=0;x<W;x+=1){if(img[(y*W+x)*4+3]>128)pts.push(x,y)}
+  for(let y=0;y<H;y+=2)for(let x=0;x<W;x+=2){if(img[(y*W+x)*4+3]>128)pts.push(x,y)}
   const total=pts.length/2,N=Math.min(MAX,Math.max(4000,total));
   // targets: points inside the website elements (nav, heading, text, buttons)
   $$('.pre').forEach(e=>e.classList.add('on'));const tr=[];
@@ -302,7 +315,7 @@ async function runIntro(){
   $$('.pre').forEach(e=>e.classList.remove('on'));
   const area=tr.reduce((a,r)=>a+r.width*r.height,0)||1;
   const X=new Float32Array(N),Y=new Float32Array(N),VX=new Float32Array(N),VY=new Float32Array(N),TX=new Float32Array(N),TY=new Float32Array(N),C=new Uint8Array(N);
-  for(let i=0;i<N;i++){const k=(Math.random()*total|0)*2;X[i]=pts[k];Y[i]=pts[k+1];const a=Math.random()*6.283,sp=(Math.random()*14+3)*dpr;VX[i]=Math.cos(a)*sp;VY[i]=Math.sin(a)*sp-2*dpr;
+  for(let i=0;i<N;i++){const k=(Math.random()*total|0)*2;X[i]=pts[k];Y[i]=pts[k+1];const a=Math.random()*6.283,sp=(Math.random()*16+4);VX[i]=Math.cos(a)*sp;VY[i]=Math.sin(a)*sp-2*dpr;
     let pick=Math.random()*area,r=tr[0];for(const q of tr){pick-=q.width*q.height;if(pick<=0){r=q;break}}
     if(r){TX[i]=(r.left+Math.random()*r.width)*dpr;TY[i]=(r.top+Math.random()*r.height)*dpr}else{TX[i]=Math.random()*W;TY[i]=Math.random()*H}
     C[i]=Math.random()*3|0}
@@ -310,13 +323,13 @@ async function runIntro(){
   const pal=[[247,236,214],[233,216,185],[201,169,110]];
   const t0=performance.now();let id=px.createImageData(W,H),buf=new Uint32Array(id.data.buffer);
   const col=pal.map(c=>(255<<24)|(c[2]<<16)|(c[1]<<8)|c[0]);
-  const T1=1100,T2=1400,T3=700;let chimed=false;
+  const T1=1500,T2=1500,T3=800;let chimed=false;
   function frame(now){if(cancel)return;const t=now-t0;buf.fill(0);
     const phase=t<T1?0:t<T1+T2?1:2,k=phase===1?ease((t-T1)/T2):1;
     for(let i=0;i<N;i++){
       if(phase===0){VX[i]*=.955;VY[i]=VY[i]*.955+.06*dpr;const sw=.0009*(Y[i]-H/2),sv=-.0009*(X[i]-W/2);X[i]+=VX[i]+sw*8;Y[i]+=VY[i]+sv*8}
       else{X[i]+= (TX[i]-X[i])*(.06+k*.25);Y[i]+=(TY[i]-Y[i])*(.06+k*.25)}
-      const xi=X[i]|0,yi=Y[i]|0;if(xi>=0&&xi<W&&yi>=0&&yi<H){const p=yi*W+xi;buf[p]=col[C[i]];if(dpr>1&&xi+1<W)buf[p+1]=col[C[i]]}}
+      const xi=X[i]|0,yi=Y[i]|0;if(xi>=0&&xi<W-2&&yi>=0&&yi<H-2){const p=yi*W+xi,c=col[C[i]];buf[p]=c;buf[p+1]=c;buf[p+W]=c;buf[p+W+1]=c}}
     px.putImageData(id,0,0);
     if(phase===2){if(!chimed){chimed=true;SFX.chime();reveal();intro.classList.add('fade')}pc.style.opacity=Math.max(0,1-(t-T1-T2)/T3)}
     if(t<T1+T2+T3)requestAnimationFrame(frame);else{intro.classList.add('gone')}}
