@@ -110,6 +110,10 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 .xp.go{left:0!important;top:0!important;width:100vw!important;height:100vh!important;border-radius:0;padding:80px 8vw}
 .xp.go>*{opacity:0;transform:translateY(-30px) scale(1.15);filter:blur(8px)}
 .xp .glare{display:none}
+
+.gsb{position:relative;width:min(440px,100%);aspect-ratio:900/520;margin:6px auto 0;overflow:hidden;border-radius:28px}
+.gsb iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0;background:transparent;opacity:0;pointer-events:none;transition:opacity 240ms ease-out}
+.gsb[data-state=ready] iframe{opacity:1;pointer-events:auto}
 /* intro */
 #intro{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;overflow:hidden}
 #intro.fade{transition:background .9s;background:transparent}
@@ -183,7 +187,7 @@ footer{border-top:1px solid var(--line);padding:30px 0;color:var(--mut);text-ali
 <span class="eyebrow rv">Contact</span>
 <h2 class="rv">Let's build something <span class="gold">remarkable</span></h2>
 <p class="sub rv">Chat with us instantly, or write to us.</p>
-<div class="card tilt rv"><div class="glare"></div><p>Email</p><span class="mail">nexorastudios795@gmail.com</span><button class="btn" data-contact>Start a project</button></div>
+<div class="card tilt rv"><div class="glare"></div><p>Email</p><span class="mail">nexorastudios795@gmail.com</span><div class="gsb" role="group" aria-label="Start a project" data-src="assets/get-started-button.html" data-svc="" data-state="paused"></div></div>
 </section>
 </div>
 <footer>© <span id="y">2026</span> Nexora Studios. All rights reserved.</footer>
@@ -280,6 +284,13 @@ $('#o-chat').onclick=()=>{const h=document.getElementById('aieos-chat'),b=h&&(h.
 /* ---------- restyle chat widget to champagne ---------- */
 (function sk(n){const h=document.getElementById('aieos-chat');if(h&&h.shadowRoot){const st=document.createElement('style');st.textContent='.b,.h,.go,.r.v .t{background:linear-gradient(135deg,#f7ecd6,#e9d8b9 40%,#c9a96e)!important;color:#0a0f1e!important}.h button{color:#0a0f1e!important}.b{box-shadow:0 10px 30px -8px rgba(233,216,185,.7)!important}';h.shadowRoot.appendChild(st);return}if(n<120)setTimeout(()=>sk(n+1),500)})(0);
 
+/* ---------- ThreeUI GetStartedButton host: mount when visible, fade in on load, click opens the contact sheet ---------- */
+$$('.gsb').forEach(h=>{let fr=null,vis=true,docv=!document.hidden;
+const sync=()=>{const m=vis&&docv;if(m&&!fr){fr=document.createElement('iframe');fr.title='Start a project';fr.setAttribute('sandbox','allow-scripts');fr.loading='eager';fr.src=h.dataset.src;h.dataset.state='loading';fr.onload=()=>h.dataset.state='ready';h.appendChild(fr)}else if(!m&&fr){fr.remove();fr=null;h.dataset.state='paused'}};
+new IntersectionObserver(([e])=>{vis=e?e.isIntersecting:true;sync()},{rootMargin:'80px'}).observe(h);
+document.addEventListener('visibilitychange',()=>{docv=!document.hidden;sync()});
+addEventListener('message',e=>{if(fr&&e.source===fr.contentWindow&&e.data&&e.data.type==='nx-start-project')openSheet(h.dataset.svc||'')});
+});
 /* ---------- intro: kinetic type -> particles -> website ---------- */
 let introDone=false;
 const intro=$('#intro'),kt=$('#kt'),w1=$('#w1'),pc=$('#pc'),px=pc.getContext('2d');
