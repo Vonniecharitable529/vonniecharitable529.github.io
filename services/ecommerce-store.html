@@ -155,6 +155,12 @@ section.s{padding:70px 0}
 .tl .when{display:inline-block;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--ch2);margin-bottom:4px}
 .tl h3{font-size:1.25rem!important}
 .samples{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.sample{grid-column:1/-1;max-width:860px;width:100%;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid var(--line2);background:rgba(233,216,185,.035)}
+.vidbox{position:relative;aspect-ratio:16/10;background:#05070f}
+.vidbox video{width:100%;height:100%;object-fit:cover;display:block}
+.badge{position:absolute;bottom:14px;right:14px;padding:6px 12px;border-radius:999px;background:rgba(7,11,23,.75);border:1px solid var(--line2);color:var(--ch);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase}
+.sbody{padding:22px 24px 26px;display:grid;gap:10px;justify-items:start}
+.sbody p{color:var(--mut)}
 .slot{aspect-ratio:16/10;border-radius:22px;border:1.5px dashed var(--line2);display:grid;place-items:center;text-align:center;color:var(--mut);background:rgba(233,216,185,.025);font-size:.9rem;padding:20px}
 .slot span{display:block;font-family:var(--serif);color:var(--ch);font-size:1.15rem;margin-bottom:4px}
 .faq details{border-bottom:1px solid var(--line);padding:18px 4px}
@@ -207,8 +213,8 @@ body.leaving main{transition:opacity .45s,transform .5s,filter .45s;opacity:0;tr
 <section class="s" id="samples">
 <span class="eyebrow rv">Our work</span>
 <h2 class="rv"><span class="gold">Samples</span></h2>
-<p class="sub rv">Fresh samples are being added. Ask us in chat to see recent work.</p>
-<div class="samples"><div class="slot rv"><div><span>Sample 1</span>Coming soon</div></div><div class="slot rv"><div><span>Sample 2</span>Coming soon</div></div><div class="slot rv"><div><span>Sample 3</span>Coming soon</div></div></div>
+<p class="sub rv">A demo store we built. Watch the preview or open the live demo.</p>
+<div class="samples"><div class="sample rv"><div class="vidbox"><video src="../assets/samples/auren-demo.mp4" poster="../assets/samples/auren-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="badge">Demo store</span></div><div class="sbody"><h3>AUREN, electronics store (demo)</h3><p>Sale banner, product carousel, category filters and a 3D collection view. Built by us as a demo, not a client project.</p><a class="btn sm" href="../demos/auren/index.html" target="_blank" rel="noopener">View live demo ↗</a></div></div></div>
 </section>
 
 <section class="s">
