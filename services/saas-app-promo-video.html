@@ -159,6 +159,8 @@ section.s{padding:70px 0}
 .vidbox{position:relative;aspect-ratio:16/10;background:#05070f}
 .vidbox video{width:100%;height:100%;object-fit:cover;display:block}
 .badge{position:absolute;bottom:14px;right:14px;padding:6px 12px;border-radius:999px;background:rgba(7,11,23,.75);border:1px solid var(--line2);color:var(--ch);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase}
+.sample.vert{max-width:380px}
+.sample.vert .vidbox{aspect-ratio:9/16}
 .sbody{padding:22px 24px 26px;display:grid;gap:10px;justify-items:start}
 .sbody p{color:var(--mut)}
 .slot{aspect-ratio:16/10;border-radius:22px;border:1.5px dashed var(--line2);display:grid;place-items:center;text-align:center;color:var(--mut);background:rgba(233,216,185,.025);font-size:.9rem;padding:20px}
@@ -213,8 +215,8 @@ body.leaving main{transition:opacity .45s,transform .5s,filter .45s;opacity:0;tr
 <section class="s" id="samples">
 <span class="eyebrow rv">Our work</span>
 <h2 class="rv"><span class="gold">Samples</span></h2>
-<p class="sub rv">Fresh samples are being added. Ask us in chat to see recent work.</p>
-<div class="samples"><div class="slot rv"><div><span>Sample 1</span>Coming soon</div></div><div class="slot rv"><div><span>Sample 2</span>Coming soon</div></div><div class="slot rv"><div><span>Sample 3</span>Coming soon</div></div></div>
+<p class="sub rv">Highlights from an app promo we made. Plays on mute.</p>
+<div class="samples"><div class="sample rv vert"><div class="vidbox"><video src="../assets/samples/vedagya-promo.mp4" poster="../assets/samples/vedagya-poster.jpg" autoplay muted loop playsinline preload="metadata"></video><span class="badge">App promo</span></div><div class="sbody"><h3>Vedagya, astrology app</h3><p>30-second vertical ad: kinetic text, 3D phone shots and app features. Highlights shown here.</p></div></div></div>
 </section>
 
 <section class="s">
